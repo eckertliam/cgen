@@ -10,6 +10,10 @@ def custom_error(message, terminal=False):
 def endline():
     return "\n"
 
+# c endline 
+def cendline():
+    return ";\n"
+
 # explicit tab for readability
 def tab():
     return "\t"
@@ -46,24 +50,40 @@ class FuncParam:
 
 # expands into c code for a function
 # parameters use the FuncParam class
-def func_def(return_t, name, params, body):
+def func_def(return_t, name, body, params=None):
     rval = return_t + " " + name + "("
-    for param in params:
-        rval += param.type + " " + param.name + ", "
+    if params != None:
+        length = len(params)
+        if length == 1:
+            rval += params[0].type + " " + params[0].name
+        else:
+            for param in params:
+                rval += param.type + " " + param.name
+                if length != 1:
+                    rval += ", "
+                length -= 1
     rval += ") " + endline() + "{" + endline() + body + endline() + "}" + endline()
     return rval
 
 # expands into c code for a function call
-def func_call(name, params):
+def func_call(name, params=None):
     rval = name + "("
-    for param in params:
-        rval += param + ", "
+    if params != None:
+        length = len(params)
+        if length == 1:
+            rval += str(params[0])
+        else:
+            for param in params:
+                rval += str(param)
+                if length != 1:
+                    rval += ", "
+                length -= 1    
     rval += ")"
     return rval
 
 # generic expansion for conditionals
 def binary_cond(n1, n2, op):
-    return "(" + binary_op(n1, n2, op) + ")"
+    return "(" + binary_op(str(n1), str(n2), op) + ")"
 
 # unary with only one parameter where the parameter is either a bool or number
 def unary_cond(n):
@@ -87,7 +107,7 @@ def else_if_cond(body, n1, n2=None, op=None):
 
 # generate an else statement with a body
 def else_cond(body):
-    return "else" + endline() + "{" + endline()
+    return "else" + endline() + "{" + endline() + body + endline() + "}" + endline()
 
 # generates a while statement with a body
 def while_cond(body, n1, n2=None, op=None):
@@ -103,11 +123,11 @@ def while_cond(body, n1, n2=None, op=None):
 
 # generates code for return expression
 def return_expr(body):
-    return "return " + body + ";" + endline()
+    return "return " + body + cendline()
 
 # generates c code for a variable declaration
 def var_def(t, name, value):
-    return t + name + " = " + str(value) + ";" + endline()
+    return t + name + " = " + str(value) + cendline()
 
 # writes to file
 def write_file(fname, text):
