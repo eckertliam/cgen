@@ -126,11 +126,41 @@ def return_expr(body):
     return "return " + body + cendline()
 
 # generates c code for a variable declaration
-def var_def(t, name, value):
-    return t + name + " = " + str(value) + cendline()
+def var_def(t, name, value=None):
+    rval = t + " " + name
+    if value != None:
+        rval += " " + str(value)
+    rval += cendline()
+    return rval
 
 # writes to file
 def write_file(fname, text):
     f = open(fname, "w")
     f.write(text)
     f.close()
+
+# expands to head import format
+def header(name):
+    return "#include " + name
+
+
+# name of the struct and any fields in a list, fields cannot be empty
+def struct(name, fields):
+    rval = "struct " + name + " {" + endline()
+    for field in fields:
+        rval += field + cendline()
+    rval += "}" + endline
+    return rval
+
+# expands into a c enum
+# for the field dict if the value is none C will just assign a value
+def cenum(name, field_dict):
+    rval = name + " {"
+    for key in field_dict:
+        rval += str(key)
+        if field_dict[key] != None:
+            rval += " " + str(field_dict[key])
+        rval += "," + endline()
+    rval += "};" + endline()
+    return rval
+
