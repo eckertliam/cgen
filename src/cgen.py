@@ -123,7 +123,7 @@ def while_cond(body, n1, n2=None, op=None):
 
 # generates code for return expression
 def return_expr(body):
-    return "return " + body + cendline()
+    return "return " + str(body) + cendline()
 
 # generates c code for a variable declaration
 def var_def(t, name, value=None):
@@ -164,3 +164,9 @@ def cenum(name, field_dict):
     rval += "};" + endline()
     return rval
 
+
+test_f = func_def("int", "add1",  return_expr(add(1,"val")), [FuncParam("val", "int")])
+main_body = func_call("add1", [1]) + cendline() + return_expr("1")
+main_func = func_def("int", "main", main_body)
+body = test_f + endline() + main_func
+write_file("test.c", body)
