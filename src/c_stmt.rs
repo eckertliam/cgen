@@ -1,5 +1,5 @@
 use crate::{
-    CExpr, CFunc, CIf, Render, StructDef, StructInit
+    CExpr, CFunc, CIf, Render, StructDef, StructInit, CType
 };
 
 pub enum CStmt {
@@ -10,6 +10,7 @@ pub enum CStmt {
     Assign(CExpr, CExpr),
     Return(CExpr),
     If(CIf),
+    VarDecl(CType, String, CExpr),
 }
 
 impl Render for CStmt {
@@ -22,6 +23,7 @@ impl Render for CStmt {
             CStmt::Assign(lhs, rhs) => format!("{} = {};", lhs.render(), rhs.render()),
             CStmt::Return(expr) => format!("return {};", expr.render()),
             CStmt::If(if_stmt) => if_stmt.render(),
+            CStmt::VarDecl(ty, name, expr) => format!("{} {} = {};", ty.render(), name, expr.render()),
         }
     }
 }

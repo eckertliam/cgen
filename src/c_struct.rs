@@ -6,6 +6,7 @@ use super::{
 };
 
 // a template to generate a C struct
+#[derive(Debug, Clone)]
 pub struct StructDef {
     pub name: &'static str,
     pub fields: Vec<(&'static str, CType)>,
@@ -20,6 +21,7 @@ impl StructDef {
     }
 }
 
+#[macro_export]
 macro_rules! struct_def {
     ($name:ident { $($field_name:ident: $field_type:expr),* }) => {
         StructDef {

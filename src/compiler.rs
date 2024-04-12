@@ -23,7 +23,7 @@ impl Compiler {
         file.write_all(self.render().as_bytes()).unwrap();
     }
 
-    pub fn compile(&self, file_name: &str) {
+    pub fn compile(&self, file_name: &str) -> Result<(), String> {
         use std::process::Command;
 
         self.render_to_file(file_name);
@@ -35,7 +35,9 @@ impl Compiler {
             .expect("failed to compile");
 
         if !output.status.success() {
-            panic!("failed to compile");
+            Err(String::from_utf8_lossy(&output.stderr).to_string())
+        } else {
+            Ok(())
         }
     }
 }
@@ -51,15 +53,24 @@ impl Render for Compiler {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::{CExpr, CType, CStmt, CFunc};
+    use crate::{CExpr, CType, CStmt, CFunc, StructDef, StructInit, struct_def};
 
     #[test]
     fn test_compiler() {
         let mut compiler = Compiler::new();
         let mut main = CFunc::new("main", CType::Int);
+        let person = struct_def!(Person {
+            name: CType::String,
+            age: CType::Int
+        });
+        compiler.stmt(CStmt::StructDef(person.clone()));
+        main.stmt(CStmt::StructInit(StructInit::from_struct_def(&person, "p", &[
+            CExpr::Str("John"),
+            CExpr::Int(20),
+        ])));
         main.stmt(CStmt::Return(CExpr::Int(0)));
         compiler.stmt(CStmt::Func(main));
-        compiler.compile("hello.c");
-        assert_eq!(std::fs::read_to_string("hello.c").unwrap(), "int main() {\nreturn 0;}");
+        let res = compiler.compile("hello.c");
+        assert!(res.is_ok());
     }
 }

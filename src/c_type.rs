@@ -1,5 +1,6 @@
 use crate::Render;
 
+#[derive(Debug, Clone)]
 pub enum CType {
     Int,
     Float,
