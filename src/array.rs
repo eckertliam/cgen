@@ -27,15 +27,15 @@ impl Render for ArrayLiteral {
     }
 }
 
-pub struct ArrayDef {
+pub struct ArrayInit {
     pub ty: CType,
     pub name: String,
     pub expr: ArrayLiteral,
 }
 
-impl ArrayDef {
+impl ArrayInit {
     pub fn new(ty: CType, name: &str) -> Self {
-        ArrayDef {
+        ArrayInit {
             ty,
             name: name.to_string(),
             expr: ArrayLiteral::new(),
@@ -47,7 +47,7 @@ impl ArrayDef {
     }
 }
 
-impl Render for ArrayDef {
+impl Render for ArrayInit {
     fn render(&self) -> String {
         format!(
             "{} {}[] = {};",
