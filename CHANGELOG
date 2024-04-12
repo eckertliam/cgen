@@ -1,0 +1,14 @@
+# CHANGELOG
+
+## 0.1.0
+
+  Minimal working version can create c files containing:
+
+- if statements
+- functions
+- assignments
+- variable declarations
+- return statements
+- struct definitions
+- struct member access
+- struct initialization
