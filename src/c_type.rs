@@ -12,7 +12,7 @@ pub enum CType {
     Union(String),
     Enum(String),
     Pointer(Box<CType>),
-    Array(Box<CType>, usize),
+    Array(Box<CType>),
     Function {
         return_type: Box<CType>,
         arguments: Vec<CType>,
@@ -32,9 +32,16 @@ impl Render for CType {
             CType::Union(name) => format!("{}", name),
             CType::Enum(name) => format!("{}", name),
             CType::Pointer(t) => format!("{}*", t.render()),
-            CType::Array(t, size) => format!("{}[{}]", t.render(), size),
-            CType::Function { return_type, arguments } => {
-                let args = arguments.iter().map(|t| t.render()).collect::<Vec<String>>().join(", ");
+            CType::Array(t) => format!("{}", t.render()),
+            CType::Function {
+                return_type,
+                arguments,
+            } => {
+                let args = arguments
+                    .iter()
+                    .map(|t| t.render())
+                    .collect::<Vec<String>>()
+                    .join(", ");
                 format!("{}(*)({})", return_type.render(), args)
             }
         }
