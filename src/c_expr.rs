@@ -12,6 +12,7 @@ pub enum CExpr {
     FieldAccess(Box<CExpr>, &'static str),
     Array(ArrayLiteral),
     ArrayAccess(Box<CExpr>, Box<CExpr>),
+    FuncCall { name: Box<CExpr>, args: Vec<CExpr> },
 }
 
 impl Render for CExpr {
@@ -27,6 +28,14 @@ impl Render for CExpr {
             CExpr::FieldAccess(expr, field) => format!("{}.{}", expr.render(), field),
             CExpr::Array(array) => array.render(),
             CExpr::ArrayAccess(array, index) => format!("{}[{}]", array.render(), index.render()),
+            CExpr::FuncCall { name, args } => {
+                let args = args
+                    .iter()
+                    .map(|arg| arg.render())
+                    .collect::<Vec<String>>()
+                    .join(", ");
+                format!("{}({})", name.render(), args)
+            }
         }
     }
 }

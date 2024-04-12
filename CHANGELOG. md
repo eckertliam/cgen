@@ -12,3 +12,7 @@
 - struct definitions
 - struct member access
 - struct initialization
+- array declarations
+- array access
+- array initialization
+- function calls
