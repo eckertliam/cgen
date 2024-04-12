@@ -1,8 +1,4 @@
-use crate::{
-    CType,
-    Render,
-    CStmt,
-};
+use crate::{CStmt, CType, Render};
 
 pub struct CFunc {
     pub name: &'static str,
@@ -32,12 +28,24 @@ impl CFunc {
 
 impl Render for CFunc {
     fn render(&self) -> String {
-        let params = self.params.iter().map(|(name, ty)| {
-            format!("{} {}", ty.render(), name)
-        }).collect::<Vec<String>>().join(", ");
-        let body = self.body.iter().map(|stmt| stmt.render()).collect::<Vec<String>>().join("\n");
-        format!("{} {}({}) {{\n{}}}", self.ret_ty.render(), self.name, params, body)
+        let params = self
+            .params
+            .iter()
+            .map(|(name, ty)| format!("{} {}", ty.render(), name))
+            .collect::<Vec<String>>()
+            .join(", ");
+        let body = self
+            .body
+            .iter()
+            .map(|stmt| stmt.render())
+            .collect::<Vec<String>>()
+            .join("\n");
+        format!(
+            "{} {}({}) {{\n{}}}",
+            self.ret_ty.render(),
+            self.name,
+            params,
+            body
+        )
     }
 }
-
-

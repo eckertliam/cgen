@@ -1,9 +1,6 @@
 use crate::CExpr;
 
-use super::{
-    CType,
-    Render,
-};
+use super::{CType, Render};
 
 // a template to generate a C struct
 #[derive(Debug, Clone)]
@@ -35,10 +32,16 @@ macro_rules! struct_def {
 
 impl Render for StructDef {
     fn render(&self) -> String {
-        let fields = self.fields.iter().map(|(name, ty)| {
-            format!("{} {}", ty.render(), name)
-        }).collect::<Vec<String>>().join("; ");
-        format!("typedef struct {} {{{};}} {};", self.name, fields, self.name)
+        let fields = self
+            .fields
+            .iter()
+            .map(|(name, ty)| format!("{} {}", ty.render(), name))
+            .collect::<Vec<String>>()
+            .join("; ");
+        format!(
+            "typedef struct {} {{{};}} {};",
+            self.name, fields, self.name
+        )
     }
 }
 
@@ -69,7 +72,7 @@ impl StructInit {
         for i in 0..def.fields.len() {
             if let Some(field) = fields.get(i) {
                 init.add_field(field.clone());
-            }else{
+            } else {
                 panic!("missing field value for field {}", def.fields[i].0)
             }
         }
@@ -79,7 +82,12 @@ impl StructInit {
 
 impl Render for StructInit {
     fn render(&self) -> String {
-        let fields = self.fields.iter().map(|f| f.render()).collect::<Vec<String>>().join(", ");
+        let fields = self
+            .fields
+            .iter()
+            .map(|f| f.render())
+            .collect::<Vec<String>>()
+            .join(", ");
         format!("{} {} = {{{}}};", self.ty.render(), self.name, fields)
     }
 }
@@ -94,6 +102,9 @@ mod tests {
             name: CType::String,
             age: CType::Int
         });
-        assert_eq!(s.render(), "typedef struct Person {char* name; int age;} Person;");
+        assert_eq!(
+            s.render(),
+            "typedef struct Person {char* name; int age;} Person;"
+        );
     }
 }

@@ -1,7 +1,4 @@
-use crate::{
-    CExpr,
-    CStmt, Render,
-};
+use crate::{CExpr, CStmt, Render};
 
 pub struct CIf {
     pub cond: CExpr,
@@ -25,7 +22,7 @@ impl CIf {
     pub fn else_stmt(&mut self, stmt: CStmt) {
         if self.else_body.is_none() {
             self.else_body = Some(Vec::new());
-        }else{
+        } else {
             self.else_body.as_mut().unwrap().push(stmt);
         }
     }
@@ -33,11 +30,20 @@ impl CIf {
 
 impl Render for CIf {
     fn render(&self) -> String {
-        let body = self.body.iter().map(|stmt| stmt.render()).collect::<Vec<String>>().join("\n");
+        let body = self
+            .body
+            .iter()
+            .map(|stmt| stmt.render())
+            .collect::<Vec<String>>()
+            .join("\n");
         let else_body = if let Some(else_body) = &self.else_body {
-            let else_body = else_body.iter().map(|stmt| stmt.render()).collect::<Vec<String>>().join("\n");
+            let else_body = else_body
+                .iter()
+                .map(|stmt| stmt.render())
+                .collect::<Vec<String>>()
+                .join("\n");
             format!("else {{\n{}}}", else_body)
-        }else{
+        } else {
             String::new()
         };
         format!("if ({}) {{\n{}}}\n{}", self.cond.render(), body, else_body)

@@ -6,9 +6,7 @@ pub struct Compiler {
 
 impl Compiler {
     pub fn new() -> Self {
-        Compiler {
-            body: Vec::new(),
-        }
+        Compiler { body: Vec::new() }
     }
 
     pub fn stmt(&mut self, stmt: CStmt) {
@@ -46,14 +44,18 @@ impl Compiler {
 // we then write the C code to a file and compile it using the C compiler
 impl Render for Compiler {
     fn render(&self) -> String {
-        self.body.iter().map(|stmt| stmt.render()).collect::<Vec<String>>().join("\n")
+        self.body
+            .iter()
+            .map(|stmt| stmt.render())
+            .collect::<Vec<String>>()
+            .join("\n")
     }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::{CExpr, CType, CStmt, CFunc, StructDef, StructInit, struct_def};
+    use crate::{struct_def, CExpr, CFunc, CStmt, CType, StructDef, StructInit};
 
     #[test]
     fn test_compiler() {
@@ -64,10 +66,11 @@ mod test {
             age: CType::Int
         });
         compiler.stmt(CStmt::StructDef(person.clone()));
-        main.stmt(CStmt::StructInit(StructInit::from_struct_def(&person, "p", &[
-            CExpr::Str("John"),
-            CExpr::Int(20),
-        ])));
+        main.stmt(CStmt::StructInit(StructInit::from_struct_def(
+            &person,
+            "p",
+            &[CExpr::Str("John"), CExpr::Int(20)],
+        )));
         main.stmt(CStmt::Return(CExpr::Int(0)));
         compiler.stmt(CStmt::Func(main));
         let res = compiler.compile("hello.c");
