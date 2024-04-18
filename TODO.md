@@ -9,12 +9,8 @@
 - [x] add struct support
 - [x] support if statements
 
-## 0.2.0
+## 0.1.1
 
-- [ ] support for loops
-- [ ] support for switch statements
-- [ ] support for while loops
-- [ ] support binary operations
-- [ ] support for unary operations
-- [ ] support for pointers and references
-- [ ] support for type casting
+- [x] support binary operations
+- [x] support for unary operations
+- [x] support for pointers and references

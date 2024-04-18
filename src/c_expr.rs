@@ -1,4 +1,4 @@
-use crate::{ArrayLiteral, Render};
+use crate::{ArrayLiteral, CBinOp, Render, CUnOp};
 
 #[derive(Debug, Clone)]
 pub enum CExpr {
@@ -13,6 +13,8 @@ pub enum CExpr {
     Array(ArrayLiteral),
     ArrayAccess(Box<CExpr>, Box<CExpr>),
     FuncCall { name: Box<CExpr>, args: Vec<CExpr> },
+    BinOp(CBinOp),
+    UnOp(CUnOp),
 }
 
 impl Render for CExpr {
@@ -36,6 +38,8 @@ impl Render for CExpr {
                     .join(", ");
                 format!("{}({})", name.render(), args)
             }
+            CExpr::BinOp(op) => op.render(),
+            CExpr::UnOp(op) => op.render(),
         }
     }
 }
