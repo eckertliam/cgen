@@ -19,6 +19,7 @@ pub use c_unop::CUnOp;
 mod c_stmt;
 pub use c_stmt::CStmt;
 mod compiler;
+pub use compiler::Compiler;
 
 pub trait Render {
     fn render(&self) -> String;
