@@ -1,5 +1,6 @@
 use crate::{CExpr, Render, CType};
 
+#[derive(Debug, Clone)]
 pub struct CEnumDef {
     pub name: &'static str,
     pub variants: Vec<(&'static str, Option<CExpr>)>,
@@ -36,6 +37,7 @@ impl Render for CEnumDef {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct CEnumInit {
     pub ty: CType,
     pub name: &'static str,

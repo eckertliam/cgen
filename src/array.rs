@@ -27,6 +27,7 @@ impl Render for ArrayLiteral {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct ArrayInit {
     pub ty: CType,
     pub name: String,

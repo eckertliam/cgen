@@ -2,6 +2,7 @@ use crate::{
     ArrayInit, CEnumDef, CEnumInit, CExpr, CFunc, CIf, CType, Render, StructDef, StructInit,
 };
 
+#[derive(Debug, Clone)]
 pub enum CStmt {
     Expr(CExpr),
     StructInit(StructInit),
@@ -10,7 +11,7 @@ pub enum CStmt {
     Assign(CExpr, CExpr),
     Return(CExpr),
     If(CIf),
-    VarDecl(CType, String, CExpr),
+    VarDecl(CType, String, Option<CExpr>),
     ArrayInit(ArrayInit),
     EnumDef(CEnumDef),
     EnumInit(CEnumInit),
@@ -27,7 +28,11 @@ impl Render for CStmt {
             CStmt::Return(expr) => format!("return {};", expr.render()),
             CStmt::If(if_stmt) => if_stmt.render(),
             CStmt::VarDecl(ty, name, expr) => {
-                format!("{} {} = {};", ty.render(), name, expr.render())
+                if let Some(expr) = expr {
+                    format!("{} {} = {};", ty.render(), name, expr.render())
+                } else {
+                    format!("{} {};", ty.render(), name)
+                }
             }
             CStmt::ArrayInit(array) => array.render(),
             CStmt::EnumDef(def) => def.render(),

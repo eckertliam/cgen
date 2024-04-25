@@ -46,6 +46,7 @@ impl Render for StructDef {
 }
 
 // a template for initializing a struct
+#[derive(Debug, Clone)]
 pub struct StructInit {
     // the type of the struct
     pub ty: CType,

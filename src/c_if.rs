@@ -1,5 +1,6 @@
 use crate::{CExpr, CStmt, Render};
 
+#[derive(Debug, Clone)]
 pub struct CIf {
     pub cond: CExpr,
     pub body: Vec<CStmt>,

@@ -1,5 +1,6 @@
 use crate::{CStmt, CType, Render};
 
+#[derive(Debug, Clone)]
 pub struct CFunc {
     pub name: &'static str,
     pub ret_ty: CType,
